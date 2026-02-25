@@ -461,3 +461,73 @@ function ccg_admin_styles() {
     </style>';
 }
 add_action('admin_head', 'ccg_admin_styles');
+
+/**
+ * Create default pages on theme activation
+ */
+function ccg_create_default_pages() {
+    $pages = array(
+        array(
+            'title'    => 'Contact',
+            'slug'     => 'contact',
+            'template' => 'page-contact.php',
+        ),
+        array(
+            'title'    => 'Investment Criteria',
+            'slug'     => 'investment-criteria',
+            'template' => 'page-investment-criteria.php',
+        ),
+        array(
+            'title'    => 'Value Creation',
+            'slug'     => 'value-creation',
+            'template' => 'page-value-creation.php',
+        ),
+        array(
+            'title'    => 'News',
+            'slug'     => 'news',
+            'template' => '',
+        ),
+    );
+
+    foreach ($pages as $page_data) {
+        // Check if page already exists
+        $existing = get_page_by_path($page_data['slug']);
+
+        if (!$existing) {
+            $page_id = wp_insert_post(array(
+                'post_title'     => $page_data['title'],
+                'post_name'      => $page_data['slug'],
+                'post_status'    => 'publish',
+                'post_type'      => 'page',
+                'comment_status' => 'closed',
+            ));
+
+            // Set page template if specified
+            if ($page_id && !empty($page_data['template'])) {
+                update_post_meta($page_id, '_wp_page_template', $page_data['template']);
+            }
+        } else {
+            // Page exists, make sure it has the right template
+            if (!empty($page_data['template'])) {
+                update_post_meta($existing->ID, '_wp_page_template', $page_data['template']);
+            }
+        }
+    }
+
+    // Set permalink structure to post name if not already set
+    if (get_option('permalink_structure') !== '/%postname%/') {
+        update_option('permalink_structure', '/%postname%/');
+        flush_rewrite_rules();
+    }
+}
+add_action('after_switch_theme', 'ccg_create_default_pages');
+
+/**
+ * Flush rewrite rules on theme activation (for custom post types)
+ */
+function ccg_rewrite_flush() {
+    ccg_register_post_types();
+    ccg_register_taxonomies();
+    flush_rewrite_rules();
+}
+add_action('after_switch_theme', 'ccg_rewrite_flush');
