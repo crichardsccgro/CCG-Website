@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: ccgro-wordpress
+    ports:
+      - "8080:80"
+    env_file:
+      - .env
+    environment:
+      WORDPRESS_DB_HOST: host.docker.internal:${MYSQL_PORT}
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      WORDPRESS_DEBUG: 1
+    volumes:
+      # Mount local files - changes are instant
+      - .:/var/www/html
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+  # Optional: phpMyAdmin for database management
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: ccgro-phpmyadmin
+    ports:
+      - "8081:80"
+    env_file:
+      - .env
+    environment:
+      PMA_HOST: host.docker.internal
+      PMA_PORT: ${MYSQL_PORT}
+      PMA_USER: ${MYSQL_USER}
+      PMA_PASSWORD: ${MYSQL_PASSWORD}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
