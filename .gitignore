@@ -38,6 +38,12 @@ desktop.ini
 
 # Node modules (if using build tools)
 node_modules/
+package.json
+package-lock.json
+
+# Scraping tools (dev only)
+scrape-ccg.js
+ccg-content.json
 
 # Environment files
 .env

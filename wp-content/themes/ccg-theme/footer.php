@@ -6,7 +6,11 @@
             <!-- Brand Column -->
             <div class="footer-brand">
                 <span class="logo-text">CCG<span>RO</span></span>
-                <p>Conscious Capital Growth is a franchise-focused private equity firm dedicated to partnering with exceptional franchise brands and their leadership teams.</p>
+                <p>Conscious Capital Growth is a lower middle market private equity firm that makes control investments in US businesses ready for accelerated growth.</p>
+                <p style="margin-top: 1rem; font-size: 0.875rem; color: rgba(255,255,255,0.6);">
+                    16220 N. Scottsdale Road, Suite 300<br>
+                    Scottsdale, Arizona 85254
+                </p>
             </div>
 
             <!-- Quick Links -->
